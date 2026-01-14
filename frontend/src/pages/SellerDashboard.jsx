@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../config/api";
+import api, { API_URL } from "../config/api";
 import { useNavigate } from "react-router-dom";
 
 export default function SellerDashboard() {
@@ -10,11 +10,7 @@ export default function SellerDashboard() {
     const token = localStorage.getItem("token");
 
     api
-      .get("/api/properties/my", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      .get("/api/properties/my")
       .then(res => setProperties(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -43,7 +39,7 @@ export default function SellerDashboard() {
       </div>
 
       {/* Listings */}
-      <h3 style={{ marginTop: "40px", color: "#334155" }}>My My Listings</h3>
+      <h3 style={{ marginTop: "40px", color: "#334155" }}>My Listings</h3>
 
       {properties.length === 0 && (
         <div style={{ textAlign: "center", padding: "60px", background: "#f8fafc", borderRadius: "16px", marginTop: "20px" }}>
@@ -72,7 +68,11 @@ export default function SellerDashboard() {
           >
             <div style={{ position: "relative" }}>
               <img
-                src={p.images?.[0]}
+                src={
+                  p.images?.[0]
+                    ? (p.images[0].startsWith("http") ? p.images[0] : `${API_URL}${p.images[0]}`)
+                    : "https://via.placeholder.com/300"
+                }
                 alt=""
                 style={{ width: "100%", height: "180px", objectFit: "cover" }}
               />

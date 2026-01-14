@@ -70,6 +70,9 @@ const propertySchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending"
+    },
+    paymentTransactionId: {
+      type: String
     }
   },
   { timestamps: true }

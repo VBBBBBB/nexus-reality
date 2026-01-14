@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../config/api";
+import api, { API_URL } from "../config/api";
 import { Link } from "react-router-dom";
 
 export default function MyEnquiries() {
@@ -52,7 +52,7 @@ export default function MyEnquiries() {
                             <div style={{ width: "200px", height: "150px", background: "#f1f5f9" }}>
                                 {e.property?.images?.[0] ? (
                                     <img
-                                        src={e.property.images[0]}
+                                        src={e.property.images[0].startsWith("http") ? e.property.images[0] : `${API_URL}${e.property.images[0]}`}
                                         alt={e.property.title}
                                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
                                     />

@@ -25,11 +25,16 @@ export const createProperty = async (req, res) => {
     images = req.files.map(file => `${req.protocol}://${req.get("host")}/uploads/${file.filename}`);
   }
 
+  const isSponsored = req.body.isSponsored === "true" || req.body.isSponsored === true;
+  const status = isSponsored ? "approved" : "pending";
+
   const property = await Property.create({
     ...req.body,
     customId,
     images,
-    seller: req.user._id
+    seller: req.user._id,
+    status,
+    isSponsored
   });
 
   res.json(property);
@@ -178,7 +183,7 @@ export const updateProperty = async (req, res) => {
     if (!property) return res.status(404).json({ message: "Property not found" });
 
     // Check ownership or admin
-    if (req.user.role !== "admin" && property.seller.toString() !== req.user._id.toString()) {
+    if (req.user.role !== "admin" && req.user.role !== "superadmin" && property.seller.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: "Not authorized to update this property" });
     }
 
@@ -209,7 +214,7 @@ export const deleteProperty = async (req, res) => {
     if (!property) return res.status(404).json({ message: "Property not found" });
 
     // Check if user is owner or admin
-    if (req.user.role !== "admin" && property.seller.toString() !== req.user._id.toString()) {
+    if (req.user.role !== "admin" && req.user.role !== "superadmin" && property.seller.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: "Not authorized to delete this property" });
     }
 

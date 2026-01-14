@@ -49,13 +49,16 @@ export default function Navbar() {
           </>
         )}
 
-        {user && user.role === "admin" && (
+        {user && (user.role === "admin" || user.role === "superadmin") && (
           <>
             <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/admin/properties")}>
               Manage Properties
             </span>
             <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/admin/enquiries")}>
               Enquiries
+            </span>
+            <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/admin/users")}>
+              Users
             </span>
             <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/admin/create-admin")}>
               Create Admin
@@ -69,7 +72,7 @@ export default function Navbar() {
           </span>
         )}
 
-        {user && user.role !== "admin" && (
+        {user && user.role !== "admin" && user.role !== "superadmin" && (
           <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/my-enquiries")}>
             My Enquiries
           </span>

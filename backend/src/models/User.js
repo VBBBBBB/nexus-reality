@@ -24,9 +24,15 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ["buyer", "seller", "admin"],
+      enum: ["buyer", "seller", "admin", "superadmin"],
       default: "buyer"
-    }
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
+    },
+    otp: String,
+    otpExpire: Date
   },
   { timestamps: true }
 );

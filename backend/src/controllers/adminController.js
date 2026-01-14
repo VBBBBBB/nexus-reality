@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 export const createAdminUser = async (req, res) => {
     try {
         // Check if the requester is an admin
-        if (req.user.role !== "admin") {
+        if (req.user.role !== "admin" && req.user.role !== "superadmin") {
             return res.status(403).json({ message: "Only admins can create admin accounts" });
         }
 
@@ -47,5 +47,40 @@ export const createAdminUser = async (req, res) => {
     } catch (error) {
         console.error("Error creating admin:", error);
         res.status(500).json({ message: "Failed to create admin user" });
+    }
+};
+// Superadmin can get all admin users
+export const getAllAdmins = async (req, res) => {
+    try {
+        const admins = await User.find({ role: { $in: ["admin", "superadmin"] } }).select("-password");
+        res.json(admins);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch admins" });
+    }
+};
+
+// Superadmin can delete other admins
+export const deleteAdmin = async (req, res) => {
+    try {
+        const adminToDelete = await User.findById(req.params.id);
+
+        if (!adminToDelete) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+
+        // Prevent deleting self
+        if (adminToDelete._id.toString() === req.user._id.toString()) {
+            return res.status(400).json({ message: "You cannot delete yourself" });
+        }
+
+        // Prevent deleting another superadmin (optional, but good practice)
+        if (adminToDelete.role === "superadmin") {
+            return res.status(403).json({ message: "Cannot delete a Super Admin. Use script instead." });
+        }
+
+        await User.deleteOne({ _id: req.params.id });
+        res.json({ message: "Admin removed successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to delete admin" });
     }
 };

@@ -44,14 +44,20 @@ export default function Login() {
         navigate("/"); // buyer goes to home
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      if (err.response?.status === 403 && err.response?.data?.notVerified) {
+        alert(err.response.data.message);
+        navigate("/verify-email", { state: { email: err.response.data.email } });
+      } else {
+        alert(err.response?.data?.message || "Login failed");
+      }
     }
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const res = await api.post("/api/auth/google", {
-        tokenId: credentialResponse.credential
+        tokenId: credentialResponse.credential,
+        mode: "login"
       });
 
       localStorage.setItem("token", res.data.token);
@@ -63,7 +69,7 @@ export default function Login() {
       else if (role === "seller") navigate("/seller/dashboard");
       else navigate("/");
     } catch (err) {
-      alert("Google Login failed");
+      alert(err.response?.data?.message || "Google Login failed");
     }
   };
 
@@ -92,19 +98,20 @@ export default function Login() {
 
           <button onClick={login}>Login</button>
 
-          <div style={{ marginTop: "15px", display: "flex", justifyContent: "center" }}>
+          <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", alignItems: "center", gap: "15px" }}>
+            <span style={{ fontSize: "14px", color: "#64748b" }}>OR</span>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => alert("Google Login Failed")}
             />
           </div>
 
-          <p className="forgot">
-            <Link to="/forgot-password" style={{ textDecoration: "none", color: "#1d72f3" }}>Forgot password?</Link>
+          <p style={{ textAlign: "center", marginTop: "25px", fontSize: "14px" }}>
+            <Link to="/forgot-password" style={{ textDecoration: "underline", color: "#1d72f3", fontWeight: "700" }}>Forgot password?</Link>
           </p>
 
-          <p className="signup">
-            Don’t have an account? <Link to="/register">Sign up</Link>
+          <p className="auth-footer" style={{ textAlign: "center", marginTop: "15px", fontSize: "14px", color: "#1e293b" }}>
+            Don’t have an account? <Link to="/register" style={{ color: "#1d72f3", fontWeight: "700", textDecoration: "underline" }}>Sign up</Link>
           </p>
         </div>
       </div>

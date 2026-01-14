@@ -15,8 +15,17 @@ export default function Register() {
   }, []);
 
   const submit = async () => {
-    await api.post("/api/auth/register", form);
-    navigate("/login");
+    try {
+      if (!form.name || !form.email || !form.phone || !form.password) {
+        alert("Please fill all fields");
+        return;
+      }
+      const res = await api.post("/api/auth/register", form);
+      alert(res.data.message);
+      navigate("/verify-email", { state: { email: form.email } });
+    } catch (err) {
+      alert(err.response?.data?.message || "Registration failed");
+    }
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -30,6 +39,7 @@ export default function Register() {
     try {
       const res = await api.post("/api/auth/google", {
         tokenId: credentialResponse.credential,
+        mode: "signup",
         role: form.role,
         phone: form.phone
       });
@@ -77,14 +87,9 @@ export default function Register() {
           />
 
           <select
+            className="role-select"
             value={form.role || "buyer"}
             onChange={e => setForm({ ...form, role: e.target.value })}
-            style={{
-              padding: 14,
-              borderRadius: 10,
-              border: "1px solid #ddd",
-              marginBottom: 20
-            }}
           >
             <option value="buyer">Buyer</option>
             <option value="seller">Seller</option>
@@ -93,7 +98,8 @@ export default function Register() {
 
           <button onClick={submit}>Create Account</button>
 
-          <div style={{ marginTop: "15px", display: "flex", justifyContent: "center" }}>
+          <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", alignItems: "center", gap: "15px" }}>
+            <span style={{ fontSize: "14px", color: "#64748b" }}>OR</span>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => alert("Google Registration Failed")}
@@ -101,8 +107,8 @@ export default function Register() {
             />
           </div>
 
-          <p className="signup">
-            Already have an account? <Link to="/login">Login</Link>
+          <p className="auth-footer" style={{ textAlign: "center", marginTop: "25px", fontSize: "14px", color: "#1e293b" }}>
+            Already have an account? <Link to="/login" style={{ color: "#1d72f3", fontWeight: "700", textDecoration: "underline" }}>Login</Link>
           </p>
         </div>
       </div>

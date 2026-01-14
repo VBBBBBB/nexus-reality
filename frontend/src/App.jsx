@@ -16,6 +16,8 @@ import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import About from "./pages/About";
+import VerifyEmail from "./pages/VerifyEmail";
+import AdminUsers from "./pages/AdminUsers";
 
 export default function App() {
   return (
@@ -29,11 +31,13 @@ export default function App() {
         <Route path="/property/:id" element={<PropertyDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
 
         {/* Admin */}
         <Route path="/admin/enquiries" element={<AdminEnquiries />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/admin/properties" element={<AdminProperties />} />
         <Route path="/admin/create-admin" element={<CreateAdmin />} />
         <Route path="/seller/dashboard" element={<SellerDashboard />} />

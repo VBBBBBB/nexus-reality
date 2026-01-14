@@ -15,6 +15,7 @@ export default function AddProperty() {
     listingType: "Resale",
     furnished: false,
     isSponsored: false,
+    paymentTransactionId: "",
     age: "",
     description: ""
   });
@@ -34,7 +35,11 @@ export default function AddProperty() {
 
   const submit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
+
+    if (form.isSponsored && !form.paymentTransactionId) {
+      alert("Please enter the UPI Transaction ID for the sponsored listing");
+      return;
+    }
 
     const formData = new FormData();
     Object.keys(form).forEach(key => {
@@ -56,6 +61,7 @@ export default function AddProperty() {
           }
         }
       );
+      alert(form.isSponsored ? "Property published as Sponsored!" : "Property sent for admin approval");
       navigate("/seller/dashboard");
     } catch (err) {
       alert(err.response?.data?.message || "Failed to add property");
@@ -72,6 +78,11 @@ export default function AddProperty() {
     transition: "border-color 0.3s",
     outline: "none"
   };
+
+  const upiId = "bhamrevishwa2004-3@okicici";
+  const premiumPrice = 999;
+  const upiUrl = `upi://pay?pa=${upiId}&pn=NexusReality&am=${premiumPrice}&cu=INR`;
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
 
   return (
     <div style={{
@@ -144,6 +155,7 @@ export default function AddProperty() {
               <option value="HINJEWADI">Hinjewadi</option>
               <option value="TATHAWADE">Tathawade</option>
               <option value="PUNAWALE">Punawale</option>
+              <option value="PUNAWALE">Punawale</option>
             </select>
           </div>
 
@@ -182,14 +194,37 @@ export default function AddProperty() {
             )}
           </div>
 
-          <div style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: "20px", marginTop: "10px" }}>
+          <div style={{ gridColumn: "1 / -1", display: "flex", flexDirection: "column", gap: "20px", marginTop: "10px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <input type="checkbox" id="furnished" name="furnished" checked={form.furnished} onChange={handleChange} style={{ width: "20px", height: "20px" }} />
               <label htmlFor="furnished" style={{ fontWeight: "500", color: "#555", cursor: "pointer" }}>Fully Furnished</label>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <input type="checkbox" id="isSponsored" name="isSponsored" checked={form.isSponsored} onChange={handleChange} style={{ width: "20px", height: "20px" }} />
-              <label htmlFor="isSponsored" style={{ fontWeight: "500", color: "#1d72f3", cursor: "pointer" }}>Promote as Sponsored Listing ✨</label>
+
+            <div style={{ background: "#f0f7ff", padding: "20px", borderRadius: "12px", border: "1px solid #cce3ff" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+                <input type="checkbox" id="isSponsored" name="isSponsored" checked={form.isSponsored} onChange={handleChange} style={{ width: "20px", height: "20px" }} />
+                <label htmlFor="isSponsored" style={{ fontWeight: "700", color: "#1d72f3", cursor: "pointer" }}>Promote as Sponsored Listing ✨ (Bypass Admin Approval)</label>
+              </div>
+
+              {form.isSponsored && (
+                <div style={{ marginTop: "15px", textAlign: "center", background: "white", padding: "20px", borderRadius: "8px", border: "1px dashed #1d72f3" }}>
+                  <p style={{ fontWeight: "600", color: "#334155", marginBottom: "15px" }}>Pay Premium Fee of ₹{premiumPrice} via UPI</p>
+                  <img src={qrCodeUrl} alt="UPI QR Code" style={{ width: "180px", marginBottom: "15px" }} />
+                  <p style={{ fontSize: "14px", color: "#64748b", marginBottom: "15px" }}>Scan to pay to <b>{upiId}</b></p>
+
+                  <div style={{ textAlign: "left" }}>
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "500", color: "#555", fontSize: "14px" }}>Transaction ID / UTR Number</label>
+                    <input
+                      name="paymentTransactionId"
+                      placeholder="Enter 12-digit transaction ID"
+                      value={form.paymentTransactionId}
+                      onChange={handleChange}
+                      required={form.isSponsored}
+                      style={inputStyle}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -206,7 +241,7 @@ export default function AddProperty() {
             cursor: "pointer",
             boxShadow: "0 4px 12px rgba(29, 114, 243, 0.3)"
           }}>
-            Publish Property
+            {form.isSponsored ? "Pay & Publish Now" : "Publish for Approval"}
           </button>
 
         </form>

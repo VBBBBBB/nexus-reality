@@ -80,6 +80,19 @@ export default function Profile() {
         }
     };
 
+    const handleDeleteAccount = async () => {
+        if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone and will delete all your data.")) return;
+
+        try {
+            await api.delete("/api/user/me");
+            localStorage.clear();
+            navigate("/");
+            window.location.reload();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to delete account");
+        }
+    };
+
     const inputStyle = {
         padding: "12px",
         borderRadius: "8px",
@@ -219,6 +232,30 @@ export default function Profile() {
                 <p style={{ marginTop: "15px", fontSize: "14px" }}>
                     Forgot your current password? <span onClick={() => navigate("/forgot-password")} style={{ color: "#1d72f3", cursor: "pointer", fontWeight: "600" }}>Click here</span> to reset by email.
                 </p>
+            </div>
+
+            {/* Danger Zone */}
+            <div style={{ marginTop: "30px", background: "#fff1f2", padding: "30px", borderRadius: "12px", border: "1px solid #fecdd3" }}>
+                <h3 style={{ marginBottom: "15px", color: "#9f1239" }}>Danger Zone</h3>
+                <p style={{ color: "#881337", marginBottom: "20px", fontSize: "14px" }}>
+                    Once you delete your account, there is no going back. Please be certain.
+                </p>
+                <button
+                    onClick={handleDeleteAccount}
+                    style={{
+                        padding: "12px 24px",
+                        background: "#e11d48",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        transition: "background 0.2s"
+                    }}
+                >
+                    Delete Account
+                </button>
             </div>
         </div>
     );

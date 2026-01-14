@@ -8,6 +8,9 @@ import enquiryRoutes from "./routes/enquiryRoutes.js";
 import migrationRoutes from "./routes/migrationRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import helmet from "helmet";
+import morgan from "morgan";
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 connectDB();
@@ -15,12 +18,24 @@ connectDB();
 const app = express();
 
 
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" })); // Allow images to be loaded
+app.use(morgan("dev"));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again later"
+});
+app.use("/api", limiter); // Apply to API routes
+
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
   credentials: true
 }));
 
 app.use(express.json());
+// Serve static files - Make sure to allow cross-origin for these
 app.use("/uploads", express.static("public/uploads"));
 
 // Routes AFTER body parser

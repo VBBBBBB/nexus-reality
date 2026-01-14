@@ -19,12 +19,16 @@ export default function SearchBar({ onSearch }) {
 
   return (
     <div className="search-bar">
-      <input
-        name="location"
-        placeholder="Location"
-        value={filters.location}
-        onChange={handleChange}
-      />
+      <select name="location" value={filters.location} onChange={handleChange}>
+        <option value="">All Locations</option>
+        <option value="AUNDH">Aundh</option>
+        <option value="BANER">Baner</option>
+        <option value="BALEWADI">Balewadi</option>
+        <option value="WAKAD">Wakad</option>
+        <option value="HINJEWADI">Hinjewadi</option>
+        <option value="TATHAWADE">Tathawade</option>
+        <option value="PUNAWALE">Punawale</option>
+      </select>
 
       <select name="listingType" value={filters.listingType} onChange={handleChange}>
         <option value="">Listing Type</option>

@@ -219,7 +219,7 @@ export default function EditProperty() {
                             <div style={{ marginTop: "10px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
                                 <p style={{ fontSize: "12px", color: "#666", width: "100%" }}>Current Images:</p>
                                 {existingImages.map((img, i) => (
-                                    <img key={i} src={img} alt="Current" style={{ width: "80px", height: "60px", objectFit: "cover", borderRadius: "4px", border: "1px solid #ddd" }} />
+                                    <img key={i} src={img.startsWith("http") ? img : `${API_URL}${img}`} alt="Current" style={{ width: "80px", height: "60px", objectFit: "cover", borderRadius: "4px", border: "1px solid #ddd" }} />
                                 ))}
                             </div>
                         )}

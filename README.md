@@ -78,8 +78,8 @@ npm run dev
 ### 🏠 Property Marketplace
 - **Comprehensive Listings**: Add properties with details like Listing Type (Rent, Resale, New), BHK, Area, and Price.
 - **Dynamic Search**: Filter properties by Location, BHK, Budget, and Listing Type.
-- **Admin Oversight**: Dedicated admin panel to **Verify**, **Reject**, or **Delete** properties to ensure quality.
-- **Sponsored Listings**: Admins can highlight premium properties to the top of the homepage.
+- **Sponsored Listings**: Sellers can instantly publish properties by paying a premium via UPI (integrated QR code system).
+- **Admin Oversight**: Dedicated admin panel to **Verify**, **Reject**, or **Delete** properties and track transaction IDs.
 
 ### 📨 Communication & Inquiries
 - **Direct Interest**: Buyers can send inquiries directly from property detail pages.

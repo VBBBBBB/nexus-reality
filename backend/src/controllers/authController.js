@@ -24,23 +24,44 @@ export const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+
     const user = await User.create({
       name,
       email,
       phone,
       password: hashedPassword,
-      role
+      role,
+      otp,
+      otpExpire
     });
 
-    res.json({
-      message: "User registered",
-      user: {
-        id: user._id,
-        name: user.name,
+    // Send OTP via email
+    try {
+      await sendEmail({
         email: user.email,
-        role: user.role
-      }
-    });
+        subject: "Verify your email - Nexus Reality",
+        message: `Your verification code is ${otp}. It will expire in 10 minutes.`,
+        html: `
+          <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+            <h2 style="color: #1d72f3;">Welcome to Nexus Reality!</h2>
+            <p>Please use the following code to verify your email address:</p>
+            <div style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #1d72f3; margin: 20px 0;">${otp}</div>
+            <p>This code will expire in 10 minutes.</p>
+          </div>
+        `
+      });
+
+      res.json({
+        message: "Registration successful. Please check your email for the verification code.",
+        email: user.email
+      });
+    } catch (err) {
+      console.error("Email Error:", err);
+      res.status(500).json({ message: "Registration successful, but failed to send verification email." });
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: err.message });
@@ -65,6 +86,14 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
+    if (!user.isVerified) {
+      return res.status(403).json({
+        message: "Please verify your email address first.",
+        notVerified: true,
+        email: user.email
+      });
+    }
+
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET || "nexus_secret",
@@ -87,7 +116,7 @@ export const loginUser = async (req, res) => {
 
 export const googleLogin = async (req, res) => {
   try {
-    const { tokenId, role, phone } = req.body;
+    const { tokenId, role, phone, mode } = req.body;
     const ticket = await client.verifyIdToken({
       idToken: tokenId,
       audience: process.env.GOOGLE_CLIENT_ID
@@ -98,17 +127,27 @@ export const googleLogin = async (req, res) => {
     let user = await User.findOne({ email });
 
     if (!user) {
-      // Create new user if doesn't exist
+      if (mode === "login") {
+        return res.status(404).json({ message: "Account does not exist. Please sign up first." });
+      }
+
+      // Create new user if doesn't exist (only if mode is 'signup' or not specified)
       user = await User.create({
         name,
         email,
         googleId,
         role: role || "buyer",
-        phone: phone // phone from register form
+        phone: phone, // phone from register form
+        isVerified: true // Google users are pre-verified
       });
     } else if (!user.googleId) {
-      // If user exists but doesn't have googleId, link it
+      // If user exists but doesn't have googleId, link it and verify
       user.googleId = googleId;
+      user.isVerified = true;
+      await user.save();
+    } else if (!user.isVerified) {
+      // If user exists with googleId but somehow not verified, verify them
+      user.isVerified = true;
       await user.save();
     }
 
@@ -218,3 +257,65 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+export const verifyEmail = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const user = await User.findOne({
+      email: email.trim().toLowerCase(),
+      otp,
+      otpExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpire = undefined;
+    await user.save();
+
+    res.json({ message: "Email verified successfully. You can now login." });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const resendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: "This email is already verified" });
+    }
+
+    // Generate new OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = otp;
+    user.otpExpire = Date.now() + 10 * 60 * 1000;
+    await user.save();
+
+    await sendEmail({
+      email: user.email,
+      subject: "New Verification Code - Nexus Reality",
+      message: `Your new verification code is ${otp}.`,
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+          <h2 style="color: #1d72f3;">New Verification Code</h2>
+          <p>Please use the following code to verify your email address:</p>
+          <div style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #1d72f3; margin: 20px 0;">${otp}</div>
+          <p>This code will expire in 10 minutes.</p>
+        </div>
+      `
+    });
+
+    res.json({ message: "OTP sent to your email." });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

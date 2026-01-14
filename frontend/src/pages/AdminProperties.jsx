@@ -76,6 +76,7 @@ export default function AdminProperties() {
                 "Property Type": p.propertyType,
                 "BHK": p.bhk,
                 "Status": p.status,
+                "Payment ID": p.paymentTransactionId || "N/A",
                 "Date Added": new Date(p.createdAt).toLocaleDateString("en-GB")
             }));
 
@@ -213,6 +214,7 @@ export default function AdminProperties() {
                                 <th style={thStyle}>Location</th>
                                 <th style={thStyle}>Type</th>
                                 <th style={thStyle}>Status</th>
+                                <th style={thStyle}>Payment ID</th>
                                 <th style={thStyle}>Action</th>
                             </tr>
                         </thead>
@@ -238,17 +240,41 @@ export default function AdminProperties() {
                                     <td style={tdStyle}>{p.location}</td>
                                     <td style={tdStyle}>{p.listingType}</td>
                                     <td style={tdStyle}>
-                                        <span style={{
-                                            padding: "4px 10px",
-                                            borderRadius: "20px",
-                                            fontSize: "11px",
-                                            fontWeight: "700",
-                                            textTransform: "uppercase",
-                                            background: p.status === "approved" ? "#dcfce7" : p.status === "rejected" ? "#fee2e2" : "#fef9c3",
-                                            color: p.status === "approved" ? "#15803d" : p.status === "rejected" ? "#b91c1c" : "#854d0e"
-                                        }}>
-                                            {p.status === "approved" ? "Verified" : p.status}
-                                        </span>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "5px", alignItems: "flex-start" }}>
+                                            <span style={{
+                                                padding: "4px 10px",
+                                                borderRadius: "20px",
+                                                fontSize: "11px",
+                                                fontWeight: "700",
+                                                textTransform: "uppercase",
+                                                background: p.status === "approved" ? "#dcfce7" : p.status === "rejected" ? "#fee2e2" : "#fef9c3",
+                                                color: p.status === "approved" ? "#15803d" : p.status === "rejected" ? "#b91c1c" : "#854d0e"
+                                            }}>
+                                                {p.status === "approved" ? "Verified" : p.status}
+                                            </span>
+                                            {p.isSponsored && (
+                                                <span style={{
+                                                    padding: "4px 10px",
+                                                    borderRadius: "20px",
+                                                    fontSize: "10px",
+                                                    fontWeight: "800",
+                                                    background: "#eff6ff",
+                                                    color: "#1d72f3",
+                                                    border: "1px solid #1d72f3"
+                                                }}>
+                                                    PREMIUM ✨
+                                                </span>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td style={tdStyle}>
+                                        {p.paymentTransactionId ? (
+                                            <div style={{ fontSize: "11px", color: "#1d72f3", fontWeight: "700", fontFamily: "monospace" }}>
+                                                {p.paymentTransactionId}
+                                            </div>
+                                        ) : (
+                                            <span style={{ color: "#cbd5e1", fontSize: "12px" }}>N/A</span>
+                                        )}
                                     </td>
                                     <td style={{ ...tdStyle, minWidth: "220px" }}>
                                         <div style={{ display: "flex", gap: "6px" }}>

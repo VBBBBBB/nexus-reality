@@ -32,9 +32,17 @@ export const sellerOnly = (req, res, next) => {
 };
 
 export const adminOnly = (req, res, next) => {
-  if (req.user.role === "admin") {
+  if (req.user.role === "admin" || req.user.role === "superadmin") {
     next();
   } else {
     res.status(403).json({ message: "Admin access only" });
+  }
+};
+
+export const superAdminOnly = (req, res, next) => {
+  if (req.user.role === "superadmin") {
+    next();
+  } else {
+    res.status(403).json({ message: "Super Admin access only" });
   }
 };

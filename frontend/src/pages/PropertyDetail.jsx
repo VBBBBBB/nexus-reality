@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../config/api";
+import api, { API_URL } from "../config/api";
 
 export default function PropertyDetail() {
   const { id } = useParams();
@@ -37,7 +37,13 @@ export default function PropertyDetail() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "20px" }}>
         <div style={{ position: "relative", borderRadius: "20px", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
           <img
-            src={property.images?.[activeImage] || "https://via.placeholder.com/1200x600"}
+            src={
+              property.images?.[activeImage]
+                ? (property.images[activeImage].startsWith("http")
+                  ? property.images[activeImage]
+                  : `${API_URL}${property.images[activeImage]}`)
+                : "https://via.placeholder.com/1200x600"
+            }
             alt={property.title}
             style={{
               width: "100%",
@@ -50,7 +56,7 @@ export default function PropertyDetail() {
             {property.images?.map((img, i) => (
               <img
                 key={i}
-                src={img}
+                src={img.startsWith("http") ? img : `${API_URL}${img}`}
                 onClick={() => setActiveImage(i)}
                 style={{
                   width: "60px",
