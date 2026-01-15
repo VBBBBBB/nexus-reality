@@ -24,7 +24,11 @@ services:
       - ./backend/public/uploads:/usr/src/app/public/uploads
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${FRONTEND_URL}
+        VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     container_name: nexus_frontend
     restart: always
     ports:
