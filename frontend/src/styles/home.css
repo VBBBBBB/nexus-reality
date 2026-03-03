@@ -256,3 +256,63 @@ section h3 {
     width: 100% !important;
   }
 }
+
+/* STRICT DESKTOP LAYOUT FIXES (min-width: 1024px) */
+@media (min-width: 1024px) {
+  .grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 3rem 2.5rem !important;
+    width: 100% !important;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+  }
+
+  /* Medium Desktop Adjustments */
+  @media (max-width: 1280px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+
+  /* Ensure card containers are stable and don't overlap */
+  .card,
+  .grid .card {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    z-index: 1 !important;
+  }
+
+  /* Fix for stretched/overlapping images */
+  .grid .card-img,
+  .grid [class*="aspect-"] {
+    position: relative !important;
+    width: 100% !important;
+    aspect-ratio: 4/3 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    display: block !important;
+  }
+
+  .grid .card-img img,
+  .grid [class*="aspect-"] img {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+  }
+
+  /* Card content stability */
+  .grid .card>div:last-child {
+    padding: 1.5rem !important;
+    background: #fff !important;
+    flex: 1 !important;
+  }
+}
