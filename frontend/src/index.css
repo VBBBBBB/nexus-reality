@@ -77,31 +77,45 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
-/* Global Responsive Base */
-@media (max-width: 1024px) {
+/* Strict Mobile Fixes (320px - 768px) */
+@media (max-width: 768px) {
 
   html,
   body {
     overflow-x: hidden;
     width: 100%;
     position: relative;
+    -webkit-text-size-adjust: 100%;
   }
 
+  /* Global Container Padding */
+  .page,
+  .hero,
+  .footer,
+  section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Fluid Typography for Headers */
   h1 {
-    font-size: 2.5rem;
+    font-size: clamp(2rem, 8vw, 2.5rem) !important;
+    line-height: 1.2 !important;
   }
 
   h2 {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 6vw, 1.8rem) !important;
   }
 
-  h2 {
-    font-size: 1.75rem;
+  h3 {
+    font-size: clamp(1.25rem, 5vw, 1.5rem) !important;
+  }
+
+  /* Full-width interactive elements */
+  button,
+  input,
+  select {
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 }

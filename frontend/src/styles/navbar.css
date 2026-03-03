@@ -17,7 +17,7 @@
     display: none;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .desktop-nav {
         display: none;
     }
@@ -35,13 +35,14 @@
         bottom: 0;
         background: white;
         flex-direction: column;
-        padding: 3rem 2rem;
-        gap: 2rem;
+        padding: 2rem 1.25rem;
+        gap: 1.5rem;
         z-index: 999;
         overflow-y: auto;
         animation: fadeIn 0.3s ease;
     }
 }
+
 
 @keyframes fadeIn {
     from {
