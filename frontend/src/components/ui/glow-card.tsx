@@ -14,19 +14,19 @@ export function GlowCard({ children, className, containerClassName }: GlowCardPr
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
         checkMobile();
         window.addEventListener("resize", checkMobile);
         return () => window.removeEventListener("resize", checkMobile);
     }, []);
 
     return (
-        <div className={cn("relative h-full w-full", containerClassName)}>
+        <div className={cn("relative h-full w-full overflow-visible", containerClassName)}>
             <GlowingEffect
-                spread={40}
+                spread={50}
                 glow={true}
                 disabled={isMobile}
-                proximity={64}
+                proximity={100}
                 inactiveZone={0.01}
                 borderWidth={3}
             />
