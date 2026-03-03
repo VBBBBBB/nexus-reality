@@ -23,7 +23,7 @@ export function GlowCard({ children, className, containerClassName }: GlowCardPr
     return (
         <div className={cn("relative h-full w-full overflow-visible", containerClassName)}>
             <GlowingEffect
-                spread={50}
+                spread={80}
                 glow={true}
                 disabled={isMobile}
                 proximity={100}

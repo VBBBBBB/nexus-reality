@@ -161,7 +161,7 @@ const GlowingEffect = memo(
                         } as React.CSSProperties
                     }
                     className={cn(
-                        "pointer-events-none absolute inset-0 rounded-[inherit] opacity-100 transition-opacity",
+                        "pointer-events-none absolute inset-0 rounded-[inherit] opacity-100 transition-opacity z-0",
                         glow && "opacity-100",
                         blur > 0 && "blur-[var(--blur)] ",
                         className,
@@ -174,11 +174,11 @@ const GlowingEffect = memo(
                             "rounded-[inherit]",
                             'after:content-[""] after:rounded-[inherit] after:absolute after:inset-[calc(-1*var(--glowingeffect-border-width))]',
                             "after:[border:var(--glowingeffect-border-width)_solid_transparent]",
-                            "after:[background:var(--gradient)] after:[background-attachment:fixed]",
+                            "after:[background:var(--gradient)]",
                             "after:opacity-[var(--active)] after:transition-opacity after:duration-300",
                             "after:[mask-clip:padding-box,border-box]",
-                            "after:[mask-composite:intersect]",
-                            "after:[mask-image:linear-gradient(#0000,#0000),conic-gradient(from_calc((var(--start)-var(--spread))*1deg),#00000000_0deg,#fff,#00000000_calc(var(--spread)*2deg))]"
+                            "after:[mask-composite:exclude]",
+                            "after:[mask-image:linear-gradient(#fff,#fff),conic-gradient(from_calc((var(--start)-var(--spread))*1deg),#00000000_0deg,#fff,#00000000_calc(var(--spread)*2deg))]"
                         )}
                     />
                 </div>
