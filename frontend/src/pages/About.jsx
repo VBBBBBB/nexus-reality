@@ -1,6 +1,7 @@
 import { Shield, Paintbrush, FileText, Sparkles, Home, Target, Users } from "lucide-react";
 import { GlowCard } from "../components/ui/glow-card";
 import { useState, useEffect } from "react";
+import { BackgroundGradientAnimation } from "../components/ui/background-gradient-animation";
 
 export default function About() {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -43,18 +44,19 @@ export default function About() {
     return (
         <div style={{ background: "#f8f9fa", minHeight: "100vh" }}>
             {/* Hero Section */}
-            <div style={{
-                background: "linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover",
-                color: "white",
-                padding: isMobile ? "80px 20px" : "120px 40px",
-                textAlign: "center",
-                marginTop: "80px"
-            }}>
-                <h1 style={{ fontSize: isMobile ? "32px" : "48px", marginBottom: "20px", fontWeight: "300", letterSpacing: "-0.02em" }}>Expertise You Can <span style={{ fontWeight: "500" }}>Trust</span></h1>
-                <p style={{ fontSize: isMobile ? "16px" : "20px", color: "rgba(255,255,255,0.9)", maxWidth: "800px", margin: "0 auto", lineHeight: "1.6", fontWeight: "300" }}>
-                    Redefining the real estate experience through transparency, technology, and comprehensive end-to-end support for every homeowner.
-                </p>
-            </div>
+            <BackgroundGradientAnimation
+                containerClassName={`w-full overflow-hidden ${isMobile ? "h-[400px]" : "h-[500px]"} mt-[80px]`}
+                className="z-50 px-4"
+            >
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-5">
+                    <h1 style={{ fontSize: isMobile ? "32px" : "48px", marginBottom: "20px", fontWeight: "300", letterSpacing: "-0.02em", color: "white" }}>
+                        Expertise You Can <span style={{ fontWeight: "500" }}>Trust</span>
+                    </h1>
+                    <p style={{ fontSize: isMobile ? "16px" : "20px", color: "rgba(255,255,255,0.9)", maxWidth: "800px", margin: "0 auto", lineHeight: "1.6", fontWeight: "300" }}>
+                        Redefining the real estate experience through transparency, technology, and comprehensive end-to-end support for every homeowner.
+                    </p>
+                </div>
+            </BackgroundGradientAnimation>
 
             {/* Story Section */}
             <div style={sectionStyle}>
