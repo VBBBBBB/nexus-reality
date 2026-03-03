@@ -3,7 +3,7 @@ import api from "../config/api";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import "../styles/login.css";
-import { GlowingEffect } from "../components/ui/glowing-effect";
+import { GlowCard } from "../components/ui/glow-card";
 
 export default function Register() {
   const [form, setForm] = useState({ role: "buyer" });
@@ -59,15 +59,10 @@ export default function Register() {
 
   return (
     <div className="login-page">
-      <div className="login-box relative border-[0.75px] border-[#e5e5e5]">
-        <GlowingEffect
-          spread={40}
-          glow={true}
-          disabled={false}
-          proximity={64}
-          inactiveZone={0.01}
-          borderWidth={3}
-        />
+      <GlowCard
+        containerClassName="login-box relative border-[0.75px] border-[#e5e5e5]"
+        className="flex"
+      >
         <div className="login-image relative z-10"></div>
 
         <div className="login-form relative z-10">
@@ -131,7 +126,8 @@ export default function Register() {
             </p>
           </div>
         </div>
-      </div>
+      </GlowCard>
     </div>
   );
 }
+

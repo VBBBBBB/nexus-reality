@@ -1,6 +1,21 @@
+"use client";
+
 import { memo, useCallback, useEffect, useRef } from "react";
 import { cn } from "../../lib/utils";
-import { animate } from "motion/react";
+import { animate } from "motion";
+
+interface GlowingEffectProps {
+    blur?: number;
+    inactiveZone?: number;
+    proximity?: number;
+    spread?: number;
+    variant?: "default" | "white";
+    glow?: boolean;
+    className?: string;
+    movementDuration?: number;
+    borderWidth?: number;
+    disabled?: boolean;
+}
 
 const GlowingEffect = memo(
     ({
@@ -14,13 +29,13 @@ const GlowingEffect = memo(
         movementDuration = 2,
         borderWidth = 1,
         disabled = true,
-    }) => {
-        const containerRef = useRef(null);
+    }: GlowingEffectProps) => {
+        const containerRef = useRef<HTMLDivElement>(null);
         const lastPosition = useRef({ x: 0, y: 0 });
         const animationFrameRef = useRef(0);
 
         const handleMove = useCallback(
-            (e) => {
+            (e?: { x: number; y: number }) => {
                 if (!containerRef.current) return;
 
                 if (animationFrameRef.current) {
@@ -87,7 +102,8 @@ const GlowingEffect = memo(
             if (disabled) return;
 
             const handleScroll = () => handleMove();
-            const handlePointerMove = (e) => handleMove(e);
+            const handlePointerMove = (e: PointerEvent) =>
+                handleMove({ x: e.clientX, y: e.clientY });
 
             window.addEventListener("scroll", handleScroll, { passive: true });
             document.body.addEventListener("pointermove", handlePointerMove, {
@@ -142,7 +158,7 @@ const GlowingEffect = memo(
                   #4c7894 calc(75% / var(--repeating-conic-gradient-times)),
                   #dd7bbb calc(100% / var(--repeating-conic-gradient-times))
                 )`,
-                        }
+                        } as React.CSSProperties
                     }
                     className={cn(
                         "pointer-events-none absolute inset-0 rounded-[inherit] opacity-100 transition-opacity",

@@ -1,19 +1,14 @@
 import { Link } from "react-router-dom";
 import { API_URL } from "../config/api";
-import { GlowingEffect } from "./ui/glowing-effect";
+import { GlowCard } from "./ui/glow-card";
 import { MapPin, BedDouble, Tag } from "lucide-react";
 
 export default function PropertyCard({ p, sponsored }) {
   return (
-    <div className="card relative h-full rounded-[1.25rem] border-[0.75px] border-[#e5e5e5] p-2 md:rounded-[1.5rem] md:p-3 list-none bg-white">
-      <GlowingEffect
-        spread={40}
-        glow={true}
-        disabled={false}
-        proximity={64}
-        inactiveZone={0.01}
-        borderWidth={3}
-      />
+    <GlowCard
+      containerClassName="card rounded-[1.25rem] border-[0.75px] border-[#e5e5e5] p-2 md:rounded-[1.5rem] md:p-3 list-none bg-white"
+      className="overflow-visible"
+    >
       <Link to={`/property/${p._id}`} className="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-transparent bg-[#ffffff] shadow-sm hover:shadow-md transition-shadow md:p-0 no-underline text-[#1a1a1a] z-10">
         <div className="relative aspect-[4/3] bg-[#f5f5f5] overflow-hidden">
           <img
@@ -49,6 +44,7 @@ export default function PropertyCard({ p, sponsored }) {
           </div>
         </div>
       </Link>
-    </div>
+    </GlowCard>
   );
 }
+

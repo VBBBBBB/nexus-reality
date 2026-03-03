@@ -1,5 +1,5 @@
 import { Shield, Paintbrush, FileText, Sparkles, Home, Target, Users } from "lucide-react";
-import { GlowingEffect } from "../components/ui/glowing-effect";
+import { GlowCard } from "../components/ui/glow-card";
 import { useState, useEffect } from "react";
 
 export default function About() {
@@ -98,23 +98,20 @@ export default function About() {
 
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
                         {services.map((s, i) => (
-                            <div key={i} className="relative rounded-[1.25rem] border-[0.75px] border-[#e5e5e5] p-2 list-none bg-white">
-                                <GlowingEffect
-                                    spread={40}
-                                    glow={true}
-                                    disabled={false}
-                                    proximity={64}
-                                    inactiveZone={0.01}
-                                    borderWidth={3}
-                                />
+                            <GlowCard
+                                key={i}
+                                containerClassName="rounded-[1.25rem] border-[0.75px] border-[#e5e5e5] p-2 bg-white"
+                                className="overflow-visible"
+                            >
                                 <div className="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-transparent bg-[#ffffff] shadow-sm z-10 p-6 md:p-8">
                                     <div style={{ marginBottom: "20px" }}>{s.icon}</div>
                                     <h3 style={{ fontSize: "20px", color: "#1a1a1a", marginBottom: "15px", fontWeight: "400" }}>{s.title}</h3>
                                     <p style={{ color: "#64748b", lineHeight: "1.6", fontWeight: "300", margin: 0, fontSize: "0.95rem" }}>{s.desc}</p>
                                 </div>
-                            </div>
+                            </GlowCard>
                         ))}
                     </div>
+
                 </div>
             </div>
 
