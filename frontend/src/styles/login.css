@@ -1,10 +1,12 @@
 .login-page {
   min-height: 100vh;
+  width: 100%;
   background: #f8f9fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 100px 2rem 4rem !important;
+  box-sizing: border-box;
   font-family: "Inter", sans-serif;
 }
 
@@ -14,10 +16,12 @@
   min-height: 650px;
   background: white;
   display: flex;
+  margin: 0 auto !important;
   overflow: hidden;
   box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.1);
   position: relative;
 }
+
 
 .login-image {
   flex: 1.2;
@@ -129,5 +133,15 @@
 
   .login-form {
     padding: 2.5rem 1.25rem;
+  }
+
+  .login-page {
+    padding-top: 80px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .login-box {
+    margin-top: 20px !important;
   }
 }
