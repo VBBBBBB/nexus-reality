@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../config/api";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import "../styles/login.css";
-import { useEffect } from "react";
+import { GlowingEffect } from "../components/ui/glowing-effect";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
@@ -19,7 +20,6 @@ export default function Login() {
       navigate("/");
     }
   }, []);
-
 
   const login = async () => {
     try {
@@ -73,15 +73,25 @@ export default function Login() {
     }
   };
 
-
-
   return (
     <div className="login-page">
-      <div className="login-box">
-        <div className="login-image"></div>
+      <div className="login-box relative border-[0.75px] border-[#e5e5e5]">
+        <GlowingEffect
+          spread={40}
+          glow={true}
+          disabled={false}
+          proximity={64}
+          inactiveZone={0.01}
+          borderWidth={3}
+        />
+        <div className="login-image relative z-10"></div>
 
-        <div className="login-form">
-          <h2>NEXUS <span>REALITY</span></h2>
+        <div className="login-form relative z-10">
+          <h2>
+            <Link to="/" style={{ textDecoration: "none", color: "#1a1a1a" }}>
+              NEXUS <span>REALITY</span>
+            </Link>
+          </h2>
 
           <input
             placeholder="Email"
@@ -98,21 +108,29 @@ export default function Login() {
 
           <button onClick={login}>Login</button>
 
-          <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", alignItems: "center", gap: "15px" }}>
-            <span style={{ fontSize: "14px", color: "#64748b" }}>OR</span>
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => alert("Google Login Failed")}
-            />
+          <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ flex: 1, height: "1px", background: "#e5e5e5" }}></div>
+              <span style={{ fontSize: "12px", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.1em" }}>OR</span>
+              <div style={{ flex: 1, height: "1px", background: "#e5e5e5" }}></div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => alert("Google Login Failed")}
+              />
+            </div>
           </div>
 
-          <p style={{ textAlign: "center", marginTop: "25px", fontSize: "14px" }}>
-            <Link to="/forgot-password" style={{ textDecoration: "underline", color: "#1d72f3", fontWeight: "700" }}>Forgot password?</Link>
-          </p>
-
-          <p className="auth-footer" style={{ textAlign: "center", marginTop: "15px", fontSize: "14px", color: "#1e293b" }}>
-            Don’t have an account? <Link to="/register" style={{ color: "#1d72f3", fontWeight: "700", textDecoration: "underline" }}>Sign up</Link>
-          </p>
+          <div className="auth-footer" style={{ textAlign: "center" }}>
+            <p>
+              <Link to="/forgot-password" style={{ color: "#666", fontWeight: "300" }}>Forgot password?</Link>
+            </p>
+            <p style={{ marginTop: "15px" }}>
+              Don’t have an account? <Link to="/register">Sign up</Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -45,32 +45,34 @@ export default function Home() {
   );
 
   return (
-    <div className="page">
-
-
+    <>
       <div className="hero">
+        <h1 className="hero-title">The Standard of Excellence</h1>
+        <p className="hero-subtitle">Discover premium real estate properties curated for extraordinary living.</p>
         <SearchBar onSearch={fetchProperties} />
       </div>
 
-      <section>
-        <h3>Sponsored Properties</h3>
-        <div className="row">
-          {sponsored.length === 0 && <p>No sponsored listings</p>}
-          {sponsored.map((p) => (
-            <PropertyCard key={p._id} p={p} sponsored />
-          ))}
-        </div>
-      </section>
+      <div className="page">
+        <section>
+          <h3>Exclusive Collections</h3>
+          <div className="row">
+            {sponsored.length === 0 && <p style={{ color: "#666", fontStyle: "italic" }}>No exclusive listings presently available.</p>}
+            {sponsored.map((p) => (
+              <PropertyCard key={p._id} p={p} sponsored />
+            ))}
+          </div>
+        </section>
 
-      <section>
-        <h3>Latest Listings</h3>
-        <div className="grid">
-          {latest.length === 0 && <p>No latest listings</p>}
-          {latest.map((p) => (
-            <PropertyCard key={p._id} p={p} />
-          ))}
-        </div>
-      </section>
-    </div>
+        <section>
+          <h3>Newly Listed Estates</h3>
+          <div className="grid">
+            {latest.length === 0 && <p style={{ color: "#666", fontStyle: "italic" }}>No new estates available.</p>}
+            {latest.map((p) => (
+              <PropertyCard key={p._id} p={p} />
+            ))}
+          </div>
+        </section>
+      </div>
+    </>
   );
 }

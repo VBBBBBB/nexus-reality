@@ -1,115 +1,178 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import "../styles/navbar.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const logout = () => {
+    setIsMenuOpen(false);
     localStorage.clear();
     navigate("/");
   };
 
-  return (
-    <div className="navbar">
-      <h2>
-        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-          NEXUS <span>REALITY</span>
-        </Link>
-      </h2>
+  const navStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "1.25rem 2rem",
+    background: scrolled || isMenuOpen ? "rgba(255, 255, 255, 0.98)" : "#ffffff",
+    boxShadow: scrolled ? "0 2px 20px rgba(0,0,0,0.05)" : "none",
+    transition: "all 0.3s ease",
+    zIndex: 1000
+  };
 
-      <div className="nav-buttons" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-        <Link to="/about" style={{ textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"}>
+  const linkStyle = {
+    textDecoration: "none",
+    color: "#1a1a1a",
+    fontWeight: "500",
+    fontSize: "0.85rem",
+    textTransform: "uppercase",
+    letterSpacing: "0.05em",
+    transition: "opacity 0.2s ease"
+  };
+
+  const btnStyle = {
+    padding: "0.75rem 1.5rem",
+    borderRadius: "0",
+    border: "1px solid #1a1a1a",
+    background: "#1a1a1a",
+    color: "white",
+    fontWeight: "500",
+    fontSize: "0.85rem",
+    textTransform: "uppercase",
+    letterSpacing: "0.05em",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    width: "fit-content"
+  };
+
+  return (
+    <>
+      <div style={navStyle}>
+        <h2 style={{ margin: 0, fontSize: "1.25rem", fontWeight: "300", letterSpacing: "0.1em" }}>
+          <Link to="/" style={{ textDecoration: "none", color: "#1a1a1a" }} onClick={() => setIsMenuOpen(false)}>
+            NEXUS <span style={{ fontWeight: "600" }}>REALITY</span>
+          </Link>
+        </h2>
+
+        {/* Desktop Links */}
+        <div className="desktop-nav">
+          <Link to="/" style={linkStyle} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
+            Home
+          </Link>
+          <Link to="/about" style={linkStyle} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
+            About Us
+          </Link>
+
+          {!user && (
+            <>
+              <Link to="/login" style={linkStyle} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
+                Login
+              </Link>
+              <Link to="/register">
+                <button
+                  style={btnStyle}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = "white";
+                    e.target.style.color = "#1a1a1a";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = "#1a1a1a";
+                    e.target.style.color = "white";
+                  }}
+                >
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          )}
+
+          {user && (
+            <>
+              <Link to="/profile" style={linkStyle} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
+                Profile
+              </Link>
+              <button
+                onClick={logout}
+                style={{ ...btnStyle, background: "transparent", color: "#1a1a1a" }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "#1a1a1a";
+                  e.target.style.color = "white";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "transparent";
+                  e.target.style.color = "#1a1a1a";
+                }}
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Mobile Toggle */}
+        <button
+          className="mobile-toggle"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <div className={isMenuOpen ? "mobile-menu" : ""} style={{ display: isMenuOpen ? "flex" : "none" }}>
+        <Link to="/" style={{ ...linkStyle, fontSize: "1.1rem" }} onClick={() => setIsMenuOpen(false)}>
+          Home
+        </Link>
+        <Link to="/about" style={{ ...linkStyle, fontSize: "1.1rem" }} onClick={() => setIsMenuOpen(false)}>
           About Us
         </Link>
 
-        {!user && (
-          <>
-            <Link to="/login" style={{ textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"}>
+        {!user ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginTop: "1rem" }}>
+            <Link to="/login" style={{ ...linkStyle, fontSize: "1.1rem" }} onClick={() => setIsMenuOpen(false)}>
               Login
             </Link>
-            <Link to="/register">
-              <button
-                style={{
-                  padding: "10px 24px",
-                  borderRadius: "12px",
-                  border: "none",
-                  background: "#1d72f3",
-                  color: "white",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                  boxShadow: "0 4px 12px rgba(29, 114, 243, 0.2)",
-                  transition: "transform 0.2s"
-                }}
-                onMouseEnter={(e) => e.target.style.transform = "scale(1.05)"}
-                onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
-              >
+            <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+              <button style={{ ...btnStyle, width: "100%", padding: "1rem" }}>
                 Sign Up
               </button>
             </Link>
-          </>
-        )}
-
-        {user && (user.role === "admin" || user.role === "superadmin") && (
-          <>
-            <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/admin/properties")}>
-              Manage Properties
-            </span>
-            <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/admin/enquiries")}>
-              Enquiries
-            </span>
-            <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/admin/users")}>
-              Users
-            </span>
-            <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/admin/create-admin")}>
-              Create Admin
-            </span>
-          </>
-        )}
-
-        {user && user.role === "seller" && (
-          <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/seller/dashboard")}>
-            My Listings
-          </span>
-        )}
-
-        {user && user.role !== "admin" && user.role !== "superadmin" && (
-          <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/my-enquiries")}>
-            My Enquiries
-          </span>
-        )}
-
-        {user && (
-          <>
-            <span style={{ cursor: "pointer", textDecoration: "none", color: "#334155", fontWeight: "600", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#1d72f3"} onMouseLeave={(e) => e.target.style.color = "#334155"} onClick={() => navigate("/profile")}>
+          </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginTop: "1rem" }}>
+            <Link to="/profile" style={{ ...linkStyle, fontSize: "1.1rem" }} onClick={() => setIsMenuOpen(false)}>
               Profile
-            </span>
-            <button
-              onClick={logout}
-              style={{
-                padding: "10px 24px",
-                borderRadius: "12px",
-                border: "1px solid #e2e8f0",
-                background: "white",
-                color: "#475569",
-                fontWeight: "600",
-                cursor: "pointer",
-                transition: "all 0.2s"
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "#f8fafc";
-                e.target.style.color = "#0f172a";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "white";
-                e.target.style.color = "#475569";
-              }}
-            >
+            </Link>
+            {user.role === "admin" && (
+              <span style={{ ...linkStyle, fontSize: "1.1rem", cursor: "pointer" }} onClick={() => { navigate("/admin/properties"); setIsMenuOpen(false); }}>
+                Manage Properties
+              </span>
+            )}
+            <button onClick={logout} style={{ ...btnStyle, width: "100%", padding: "1rem" }}>
               Logout
             </button>
-          </>
+          </div>
         )}
       </div>
-
-    </div>
+    </>
   );
 }
+

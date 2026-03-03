@@ -1,32 +1,46 @@
 .login-page {
   min-height: 100vh;
-  background: #f4f8fc;
+  background: #f8f9fa;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
+  font-family: "Inter", sans-serif;
 }
 
 .login-box {
-  width: 1050px;
-  min-height: 620px;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 650px;
   background: white;
-  border-radius: 28px;
   display: flex;
   overflow: hidden;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2);
-  margin: 40px 20px;
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .login-image {
-  flex: 1.1;
-  background-image: url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c");
+  flex: 1.2;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c");
   background-size: cover;
   background-position: center;
+  position: relative;
+}
+
+.login-image::after {
+  content: "NEXUS REALITY";
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
 }
 
 .login-form {
-  flex: 1.2;
-  padding: 40px 60px;
+  flex: 1;
+  padding: 60px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,58 +48,85 @@
 }
 
 .login-form h2 {
-  margin-bottom: 25px;
-  font-size: 28px;
+  margin-bottom: 40px;
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: #1a1a1a;
   text-align: center;
-  font-weight: 700;
-  color: #0f172a;
 }
 
-.login-form span {
-  color: #1d72f3;
+.login-form h2 span {
+  font-weight: 600;
 }
 
 .login-form input,
 .role-select {
-  margin-bottom: 20px;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  font-size: 15px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #e5e5e5;
+  font-size: 1rem;
   background: white;
-  transition: border-color 0.2s;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  width: 100%;
 }
 
 .login-form input:focus,
 .role-select:focus {
-  border-color: #1d72f3;
+  border-color: #1a1a1a;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(29, 114, 243, 0.1);
 }
 
 .login-form button {
-  background: #1d72f3;
+  background: #1a1a1a;
   color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
+  border: 1px solid #1a1a1a;
+  padding: 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
 .login-form button:hover {
-  background: #175ec2;
+  background: white;
+  color: #1a1a1a;
 }
 
-.forgot {
-  margin-top: 15px;
-  color: #1d72f3;
-  cursor: pointer;
+.auth-footer {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 300;
 }
 
-.signup {
-  margin-top: 10px;
+.auth-footer a {
+  color: #1a1a1a;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
 
+.auth-footer a:hover {
+  border-bottom-color: #1a1a1a;
+}
+
+@media (max-width: 1024px) {
+  .login-image {
+    display: none;
+  }
+
+  .login-box {
+    max-width: 500px;
+    min-height: auto;
+  }
+
+  .login-form {
+    padding: 40px 20px;
+  }
 }
