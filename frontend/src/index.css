@@ -82,10 +82,16 @@ button:focus-visible {
 
   html,
   body {
-    overflow-x: hidden;
-    width: 100%;
+    overflow-x: hidden !important;
+    width: 100vw !important;
     position: relative;
     -webkit-text-size-adjust: 100%;
+  }
+
+  /* Force height auto to prevent vertical stretching */
+  [class*="h-full"],
+  .h-full {
+    height: auto !important;
   }
 
   /* Global Container Padding */
@@ -93,22 +99,26 @@ button:focus-visible {
   .hero,
   .footer,
   section {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   /* Fluid Typography for Headers */
   h1 {
-    font-size: clamp(2rem, 8vw, 2.5rem) !important;
+    font-size: clamp(1.8rem, 10vw, 2.4rem) !important;
     line-height: 1.2 !important;
+    text-align: center !important;
   }
 
   h2 {
-    font-size: clamp(1.5rem, 6vw, 1.8rem) !important;
+    font-size: clamp(1.5rem, 8vw, 1.8rem) !important;
+    text-align: center !important;
   }
 
   h3 {
-    font-size: clamp(1.25rem, 5vw, 1.5rem) !important;
+    font-size: clamp(1.3rem, 6vw, 1.5rem) !important;
   }
 
   /* Full-width interactive elements */
@@ -117,5 +127,14 @@ button:focus-visible {
   select {
     width: 100% !important;
     box-sizing: border-box !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Images specific fix */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
   }
 }
