@@ -6,10 +6,10 @@ import { MapPin, BedDouble, Tag } from "lucide-react";
 export default function PropertyCard({ p, sponsored }) {
   return (
     <GlowCard
-      containerClassName="card rounded-[1.25rem] p-2 md:rounded-[1.5rem] md:p-3 list-none overflow-visible"
+      containerClassName="card rounded-[1.25rem] border-[0.75px] border-[#e5e5e5] p-2 md:rounded-[1.5rem] md:p-3 list-none bg-white"
       className="overflow-visible"
     >
-      <Link to={`/property/${p._id}`} className="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-[#e5e5e5] bg-[#ffffff] shadow-sm hover:shadow-md transition-shadow md:p-0 no-underline text-[#1a1a1a] z-10">
+      <Link to={`/property/${p._id}`} className="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-transparent bg-[#ffffff] shadow-sm hover:shadow-md transition-shadow md:p-0 no-underline text-[#1a1a1a] z-10">
         <div className="relative aspect-[4/3] bg-[#f5f5f5] overflow-hidden">
           <img
             src={
