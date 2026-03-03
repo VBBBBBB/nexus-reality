@@ -259,36 +259,47 @@ section h3 {
 
 /* STRICT DESKTOP LAYOUT FIXES (min-width: 1024px) */
 @media (min-width: 1024px) {
-  .grid {
+
+  .grid,
+  .row {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 3rem 2.5rem !important;
     width: 100% !important;
     max-width: 1400px !important;
     margin: 0 auto !important;
+    overflow: visible !important;
+    padding-bottom: 0 !important;
   }
 
   /* Medium Desktop Adjustments */
   @media (max-width: 1280px) {
-    .grid {
+
+    .grid,
+    .row {
       grid-template-columns: repeat(2, 1fr) !important;
     }
   }
 
   /* Ensure card containers are stable and don't overlap */
   .card,
-  .grid .card {
+  .grid .card,
+  .row .card {
     position: relative !important;
     width: 100% !important;
     height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
     z-index: 1 !important;
+    min-width: unset !important;
+    flex-shrink: unset !important;
   }
 
   /* Fix for stretched/overlapping images */
   .grid .card-img,
-  .grid [class*="aspect-"] {
+  .grid [class*="aspect-"],
+  .row .card-img,
+  .row [class*="aspect-"] {
     position: relative !important;
     width: 100% !important;
     aspect-ratio: 4/3 !important;
@@ -298,7 +309,9 @@ section h3 {
   }
 
   .grid .card-img img,
-  .grid [class*="aspect-"] img {
+  .grid [class*="aspect-"] img,
+  .row .card-img img,
+  .row [class*="aspect-"] img {
     position: relative !important;
     width: 100% !important;
     height: 100% !important;
@@ -310,7 +323,8 @@ section h3 {
   }
 
   /* Card content stability */
-  .grid .card>div:last-child {
+  .grid .card>div:last-child,
+  .row .card>div:last-child {
     padding: 1.5rem !important;
     background: #fff !important;
     flex: 1 !important;
