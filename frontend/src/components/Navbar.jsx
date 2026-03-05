@@ -62,6 +62,39 @@ export default function Navbar() {
     transition: "all 0.3s ease",
     width: "fit-content"
   };
+  const getNavLinks = () => {
+    const commonLinks = [
+      { name: "Home", path: "/" },
+      { name: "About Us", path: "/about" },
+    ];
+
+    if (!user) {
+      return { commonLinks, roleLinks: [] };
+    }
+
+    const roleLinks = [];
+    const role = user.role || "buyer";
+
+    if (role === "buyer") {
+      roleLinks.push({ name: "My Enquiries", path: "/my-enquiries" });
+    } else if (role === "seller") {
+      roleLinks.push({ name: "Dashboard", path: "/seller/dashboard" });
+      roleLinks.push({ name: "Add Property", path: "/seller/add-property" });
+    } else if (role === "admin") {
+      roleLinks.push({ name: "Manage Properties", path: "/admin/properties" });
+      roleLinks.push({ name: "Manage Users", path: "/admin/users" });
+      roleLinks.push({ name: "Manage Enquiries", path: "/admin/enquiries" });
+    } else if (role === "superadmin") {
+      roleLinks.push({ name: "Manage Properties", path: "/admin/properties" });
+      roleLinks.push({ name: "Manage Users", path: "/admin/users" });
+      roleLinks.push({ name: "Manage Enquiries", path: "/admin/enquiries" });
+      roleLinks.push({ name: "Create Admin", path: "/admin/create-admin" });
+    }
+
+    return { commonLinks, roleLinks };
+  };
+
+  const { commonLinks, roleLinks } = getNavLinks();
 
   return (
     <>
@@ -74,12 +107,11 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="desktop-nav">
-          <Link to="/" style={linkStyle} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
-            Home
-          </Link>
-          <Link to="/about" style={linkStyle} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
-            About Us
-          </Link>
+          {commonLinks.map((link) => (
+            <Link key={link.name} to={link.path} style={linkStyle} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
+              {link.name}
+            </Link>
+          ))}
 
           {!user && (
             <>
@@ -106,6 +138,11 @@ export default function Navbar() {
 
           {user && (
             <>
+              {roleLinks.map((link) => (
+                <Link key={link.name} to={link.path} style={linkStyle} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
+                  {link.name}
+                </Link>
+              ))}
               <Link to="/profile" style={linkStyle} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
                 Profile
               </Link>
@@ -138,12 +175,11 @@ export default function Navbar() {
 
       {/* Mobile Menu Overlay */}
       <div className={isMenuOpen ? "mobile-menu" : ""} style={{ display: isMenuOpen ? "flex" : "none" }}>
-        <Link to="/" style={{ ...linkStyle, fontSize: "1.1rem" }} onClick={() => setIsMenuOpen(false)}>
-          Home
-        </Link>
-        <Link to="/about" style={{ ...linkStyle, fontSize: "1.1rem" }} onClick={() => setIsMenuOpen(false)}>
-          About Us
-        </Link>
+        {commonLinks.map((link) => (
+          <Link key={link.name} to={link.path} style={{ ...linkStyle, fontSize: "1.1rem" }} onClick={() => setIsMenuOpen(false)}>
+            {link.name}
+          </Link>
+        ))}
 
         {!user ? (
           <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginTop: "1rem" }}>
@@ -158,14 +194,14 @@ export default function Navbar() {
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginTop: "1rem" }}>
+            {roleLinks.map((link) => (
+              <span key={link.name} style={{ ...linkStyle, fontSize: "1.1rem", cursor: "pointer" }} onClick={() => { navigate(link.path); setIsMenuOpen(false); }}>
+                {link.name}
+              </span>
+            ))}
             <Link to="/profile" style={{ ...linkStyle, fontSize: "1.1rem" }} onClick={() => setIsMenuOpen(false)}>
               Profile
             </Link>
-            {user.role === "admin" && (
-              <span style={{ ...linkStyle, fontSize: "1.1rem", cursor: "pointer" }} onClick={() => { navigate("/admin/properties"); setIsMenuOpen(false); }}>
-                Manage Properties
-              </span>
-            )}
             <button onClick={logout} style={{ ...btnStyle, width: "100%", padding: "1rem" }}>
               Logout
             </button>
