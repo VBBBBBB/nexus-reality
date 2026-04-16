@@ -24,28 +24,30 @@ export default function App() {
     <>
       <Navbar />
 
-      <Routes>
-        {/* Public */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/property/:id" element={<PropertyDetail />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+      <div style={{ paddingTop: "80px", minHeight: "100vh", boxSizing: "border-box" }}>
+        <Routes>
+          {/* Public */}
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/property/:id" element={<PropertyDetail />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
 
-        {/* Admin */}
-        <Route path="/admin/enquiries" element={<AdminEnquiries />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/properties" element={<AdminProperties />} />
-        <Route path="/admin/create-admin" element={<CreateAdmin />} />
-        <Route path="/seller/dashboard" element={<SellerDashboard />} />
-        <Route path="/seller/add-property" element={<AddProperty />} />
-        <Route path="/my-enquiries" element={<MyEnquiries />} />
-        <Route path="/seller/edit-property/:id" element={<EditProperty />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+          {/* Admin */}
+          <Route path="/admin/enquiries" element={<AdminEnquiries />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/properties" element={<AdminProperties />} />
+          <Route path="/admin/create-admin" element={<CreateAdmin />} />
+          <Route path="/seller/dashboard" element={<SellerDashboard />} />
+          <Route path="/seller/add-property" element={<AddProperty />} />
+          <Route path="/my-enquiries" element={<MyEnquiries />} />
+          <Route path="/seller/edit-property/:id" element={<EditProperty />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </div>
 
       <Footer />
     </>
